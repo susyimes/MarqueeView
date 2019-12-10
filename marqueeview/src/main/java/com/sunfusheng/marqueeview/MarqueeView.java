@@ -2,12 +2,21 @@ package com.sunfusheng.marqueeview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.AnimRes;
 import android.support.annotation.FontRes;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.text.PrecomputedTextCompat;
+import android.support.v7.widget.AppCompatTextView;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextDirectionHeuristics;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -56,6 +65,15 @@ public class MarqueeView<T> extends ViewFlipper {
     private List<T> messages = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
 
+
+    private TextPaint textPaint;
+
+    private Layout.Alignment alignment;
+
+    private Canvas dummyCanvas;
+
+    private int screenWidth;
+
     public MarqueeView(Context context) {
         this(context, null);
     }
@@ -67,6 +85,13 @@ public class MarqueeView<T> extends ViewFlipper {
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MarqueeViewStyle, defStyleAttr, 0);
+
+        textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        textPaint.density = context.getResources().getDisplayMetrics().density;
+        textPaint.setTextSize(Util.fromDPtoPix(context, textSize));
+        alignment = Layout.Alignment.ALIGN_NORMAL;
+        screenWidth = Util.getScreenWidth(context);
+        dummyCanvas = new Canvas();
 
         interval = typedArray.getInteger(R.styleable.MarqueeViewStyle_mvInterval, interval);
         hasSetAnimDuration = typedArray.hasValue(R.styleable.MarqueeViewStyle_mvAnimDuration);
@@ -265,22 +290,39 @@ public class MarqueeView<T> extends ViewFlipper {
         }
     }
 
-    private TextView createTextView(T marqueeItem) {
-        TextView textView = (TextView) getChildAt((getDisplayedChild() + 1) % 3);
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private View createTextView(T marqueeItem) {
+
+
+
+
+        StaticLayoutView  textView = (StaticLayoutView ) getChildAt((getDisplayedChild() + 1) % 3);
         if (textView == null) {
-            textView = new TextView(getContext());
-            textView.setGravity(gravity | Gravity.CENTER_VERTICAL);
-            textView.setTextColor(textColor);
-            textView.setTextSize(textSize);
-            textView.setIncludeFontPadding(true);
-            textView.setSingleLine(singleLine);
-            if (singleLine) {
-                textView.setMaxLines(1);
-                textView.setEllipsize(TextUtils.TruncateAt.END);
+            textView = new StaticLayoutView (getContext());
+//            textView.setGravity(gravity | Gravity.CENTER_VERTICAL);
+//            textView.setTextColor(textColor);
+//            textView.setTextSize(textSize);
+//            textView.setIncludeFontPadding(true);
+//            textView.setSingleLine(singleLine);
+//            if (singleLine) {
+//                textView.setMaxLines(1);
+//                textView.setEllipsize(TextUtils.TruncateAt.END);
+//            }
+//            if (typeface != null) {
+//                textView.setTypeface(typeface);
+//            }
+
+            CharSequence message = "";
+            if (marqueeItem instanceof CharSequence) {
+                message = (CharSequence) marqueeItem;
+            } else if (marqueeItem instanceof IMarqueeItem) {
+                message = ((IMarqueeItem) marqueeItem).marqueeMessage();
             }
-            if (typeface != null) {
-                textView.setTypeface(typeface);
-            }
+            StaticLayout layout = new StaticLayout(message, textPaint, screenWidth, alignment, 1.0f, 0f, true);
+            layout.draw(dummyCanvas);
+
+
+            textView.setLayout(layout);
             textView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -290,14 +332,8 @@ public class MarqueeView<T> extends ViewFlipper {
                 }
             });
         }
-        CharSequence message = "";
-        if (marqueeItem instanceof CharSequence) {
-            message = (CharSequence) marqueeItem;
-        } else if (marqueeItem instanceof IMarqueeItem) {
-            message = ((IMarqueeItem) marqueeItem).marqueeMessage();
-        }
-        textView.setText(message);
-        textView.setTag(position);
+
+
         return textView;
     }
 
