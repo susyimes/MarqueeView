@@ -289,15 +289,16 @@ public class MarqueeView<T> extends ViewFlipper {
                     }
                 }
             });
+            CharSequence message = "";
+            if (marqueeItem instanceof CharSequence) {
+                message = (CharSequence) marqueeItem;
+            } else if (marqueeItem instanceof IMarqueeItem) {
+                message = ((IMarqueeItem) marqueeItem).marqueeMessage();
+            }
+            textView.setText(message);
+            textView.setTag(position);
         }
-        CharSequence message = "";
-        if (marqueeItem instanceof CharSequence) {
-            message = (CharSequence) marqueeItem;
-        } else if (marqueeItem instanceof IMarqueeItem) {
-            message = ((IMarqueeItem) marqueeItem).marqueeMessage();
-        }
-        textView.setText(message);
-        textView.setTag(position);
+
         return textView;
     }
 
