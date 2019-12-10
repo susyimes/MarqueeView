@@ -9,7 +9,9 @@
     <com.sunfusheng.marqueeview.MarqueeView
         android:id="@+id/marqueeView"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_gravity="center"
         app:mvAnimDuration="1000"
         app:mvDirection="bottom_to_top"
