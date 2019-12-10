@@ -5,18 +5,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
     <com.sunfusheng.marqueeview.MarqueeView
         android:id="@+id/marqueeView"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="@color/background_common_dark"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
         app:mvAnimDuration="1000"
         app:mvDirection="bottom_to_top"
         app:mvInterval="3000"
-        app:mvSingleLine="true" />
-
+        app:mvTextColor="#333333"
+        app:mvTextSize="13sp"
+        app:mvSingleLine="true"
+        android:layout_marginLeft="9dp"
+        android:layout_marginRight="9dp"
+        android:ellipsize="end"
+        />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"

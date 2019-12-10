@@ -22,6 +22,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -40,9 +41,9 @@ public class MarqueeView<T> extends ViewFlipper {
     private boolean hasSetAnimDuration = false;
     private int animDuration = 1000;
     private int textSize = 14;
-    private int textColor = 0xff000000;
-    private boolean singleLine = false;
-
+//    private int textColor = 0xff000000;
+//    private boolean singleLine = false;
+//
     private int gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
     private static final int GRAVITY_LEFT = 0;
     private static final int GRAVITY_CENTER = 1;
@@ -96,12 +97,14 @@ public class MarqueeView<T> extends ViewFlipper {
         interval = typedArray.getInteger(R.styleable.MarqueeViewStyle_mvInterval, interval);
         hasSetAnimDuration = typedArray.hasValue(R.styleable.MarqueeViewStyle_mvAnimDuration);
         animDuration = typedArray.getInteger(R.styleable.MarqueeViewStyle_mvAnimDuration, animDuration);
-        singleLine = typedArray.getBoolean(R.styleable.MarqueeViewStyle_mvSingleLine, false);
+        //singleLine = typedArray.getBoolean(R.styleable.MarqueeViewStyle_mvSingleLine, false);
         if (typedArray.hasValue(R.styleable.MarqueeViewStyle_mvTextSize)) {
             textSize = (int) typedArray.getDimension(R.styleable.MarqueeViewStyle_mvTextSize, textSize);
             textSize = Utils.px2sp(context, textSize);
         }
-        textColor = typedArray.getColor(R.styleable.MarqueeViewStyle_mvTextColor, textColor);
+
+
+        //textColor = typedArray.getColor(R.styleable.MarqueeViewStyle_mvTextColor, textColor);
         @FontRes int fontRes = typedArray.getResourceId(R.styleable.MarqueeViewStyle_mvFont, 0);
         if (fontRes != 0) {
             typeface = ResourcesCompat.getFont(context, fontRes);
@@ -255,6 +258,7 @@ public class MarqueeView<T> extends ViewFlipper {
         position = 0;
         addView(createTextView(messages.get(position)));
 
+
         if (messages.size() > 1) {
             setInAndOutAnimation(inAnimResId, outAnimResID);
             startFlipping();
@@ -290,15 +294,16 @@ public class MarqueeView<T> extends ViewFlipper {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private View createTextView(T marqueeItem) {
 
 
 
 
-        StaticLayoutView  textView = (StaticLayoutView ) getChildAt((getDisplayedChild() + 1) % 3);
+        StaticLayoutView  textView = (StaticLayoutView) getChildAt((getDisplayedChild() + 1) % 3);
         if (textView == null) {
+
             textView = new StaticLayoutView (getContext());
+
 //            textView.setGravity(gravity | Gravity.CENTER_VERTICAL);
 //            textView.setTextColor(textColor);
 //            textView.setTextSize(textSize);
@@ -323,6 +328,7 @@ public class MarqueeView<T> extends ViewFlipper {
 
 
             textView.setLayout(layout);
+            textView.invalidate();
             textView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
