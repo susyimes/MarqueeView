@@ -52,7 +52,7 @@ public class MarqueeView<T> extends ViewFlipper {
     @AnimRes
     private int outAnimResId = R.anim.anim_top_out;
 
-    //private int position;
+    private int position;
     private List<T> messages = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
 
@@ -229,7 +229,7 @@ public class MarqueeView<T> extends ViewFlipper {
         if (messages == null || messages.isEmpty()) {
             throw new RuntimeException("The messages cannot be empty!");
         }
-       // position = 0;
+        position = 0;
        // addView(createTextView(messages.get(position)));
 
         if (messages.size() > 1) {
@@ -249,11 +249,11 @@ public class MarqueeView<T> extends ViewFlipper {
 //
 //                @Override
 //                public void onAnimationEnd(Animation animation) {
-////                    position++;
-////                    if (position >= messages.size()) {
-////                        position = 0;
-////                    }
-////                    View view = createTextView(messages.get(position));
+//                    position++;
+//                    if (position >= messages.size()) {
+//                        position = 0;
+//                    }
+//                    //View view = createTextView(messages.get(position));
 ////                    if (view.getParent() == null) {
 ////                        addView(view);
 ////                    }
@@ -297,7 +297,7 @@ public class MarqueeView<T> extends ViewFlipper {
             } else if (message instanceof IMarqueeItem) {
                 textView.setText(((IMarqueeItem) message).marqueeMessage());
             }
-            //textView.setTag(position);
+            textView.setTag(position++);
             addView(textView);
         }
 //        TextView textView = (TextView) getChildAt(position);
