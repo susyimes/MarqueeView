@@ -8,10 +8,10 @@ import com.sunfusheng.marqueeview.IMarqueeItem;
 public class CustomModel implements IMarqueeItem {
 
     public int id;
-    public String title;
-    public String content;
+    public Object title;
+    public Object content;
 
-    public CustomModel(int id, String title, String content) {
+    public CustomModel(int id, Object title, Object content) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -19,6 +19,9 @@ public class CustomModel implements IMarqueeItem {
 
     @Override
     public CharSequence marqueeMessage() {
+//        if (title instanceof CharSequence){
+//            return
+//        }
         return title + "\n" + content;
     }
 }

@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter.Builder(this, getSupportFragmentManager())
                 .add("Common", new CommonFragment())
-                .add("RecyclerView", new RecyclerViewFragment())
+                //.add("RecyclerView", new RecyclerViewFragment())
                 .build();
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(1);

@@ -56,7 +56,6 @@ public class MarqueeView<T> extends ViewFlipper {
     private List<T> messages = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
 
-
     public MarqueeView(Context context) {
         this(context, null);
     }
@@ -175,7 +174,7 @@ public class MarqueeView<T> extends ViewFlipper {
             int size = messageLength / limit + (messageLength % limit != 0 ? 1 : 0);
             for (int i = 0; i < size; i++) {
                 int startIndex = i * limit;
-                int endIndex = ((i + 1) * limit >= messageLength ? messageLength : (i + 1) * limit);
+                int endIndex = (Math.min((i + 1) * limit, messageLength));
                 list.add(message.substring(startIndex, endIndex));
             }
         }
@@ -224,53 +223,53 @@ public class MarqueeView<T> extends ViewFlipper {
     private void start(final @AnimRes int inAnimResId, final @AnimRes int outAnimResID) {
         removeAllViews();
         clearAnimation();
-        createTextView();
         // 检测数据源
         if (messages == null || messages.isEmpty()) {
             throw new RuntimeException("The messages cannot be empty!");
         }
         position = 0;
-       // addView(createTextView(messages.get(position)));
+        addView(createTextView(messages.get(position)));
 
         if (messages.size() > 1) {
             setInAndOutAnimation(inAnimResId, outAnimResID);
+            showNext();
             startFlipping();
         }
 
-//        if (getInAnimation() != null) {
-//            getInAnimation().setAnimationListener(new Animation.AnimationListener() {
-//                @Override
-//                public void onAnimationStart(Animation animation) {
-//                    if (isAnimStart) {
-//                        animation.cancel();
-//                    }
-//                    isAnimStart = true;
-//                }
-//
-//                @Override
-//                public void onAnimationEnd(Animation animation) {
-//                    position++;
-//                    if (position >= messages.size()) {
-//                        position = 0;
-//                    }
-//                    //View view = createTextView(messages.get(position));
-////                    if (view.getParent() == null) {
-////                        addView(view);
-////                    }
-//                    isAnimStart = false;
-//                }
-//
-//                @Override
-//                public void onAnimationRepeat(Animation animation) {
-//                }
-//            });
-//        }
+        if (getInAnimation() != null) {
+            getInAnimation().setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    if (isAnimStart) {
+                        animation.cancel();
+                    }
+                    isAnimStart = true;
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    position++;
+                    if (position >= messages.size()) {
+                        position = 0;
+                    }
+                    View view = createTextView(messages.get(position));
+                    if (view.getParent() == null) {
+                        addView(view);
+                    }
+                    isAnimStart = false;
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
+        }
     }
 
-    private void createTextView() {
-//        (getDisplayedChild() + 1) % 3
-        for (T message : messages){
-          TextView  textView = new TextView(getContext());
+    private TextView createTextView(T marqueeItem) {
+        TextView textView = (TextView) getChildAt((getDisplayedChild() + 1) % 3);
+        if (textView == null) {
+            textView = new TextView(getContext());
             textView.setGravity(gravity | Gravity.CENTER_VERTICAL);
             textView.setTextColor(textColor);
             textView.setTextSize(textSize);
@@ -291,49 +290,16 @@ public class MarqueeView<T> extends ViewFlipper {
                     }
                 }
             });
-
-            if (message instanceof CharSequence) {
-                textView.setText((CharSequence) message);
-            } else if (message instanceof IMarqueeItem) {
-                textView.setText(((IMarqueeItem) message).marqueeMessage());
-            }
-            textView.setTag(position++);
-            addView(textView);
         }
-//        TextView textView = (TextView) getChildAt(position);
-//        if (textView == null) {
-//            textView = new TextView(getContext());
-//            textView.setGravity(gravity | Gravity.CENTER_VERTICAL);
-//            textView.setTextColor(textColor);
-//            textView.setTextSize(textSize);
-//            textView.setIncludeFontPadding(true);
-//            textView.setSingleLine(singleLine);
-//            if (singleLine) {
-//                textView.setMaxLines(1);
-//                textView.setEllipsize(TextUtils.TruncateAt.END);
-//            }
-//            if (typeface != null) {
-//                textView.setTypeface(typeface);
-//            }
-//            textView.setOnClickListener(new OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (onItemClickListener != null) {
-//                        onItemClickListener.onItemClick(getPosition(), (TextView) v);
-//                    }
-//                }
-//            });
-//            CharSequence message = "";
-//            if (marqueeItem instanceof CharSequence) {
-//                message = (CharSequence) marqueeItem;
-//            } else if (marqueeItem instanceof IMarqueeItem) {
-//                message = ((IMarqueeItem) marqueeItem).marqueeMessage();
-//            }
-//            textView.setText(message);
-//            textView.setTag(position);
-//        }
-
-        //return textView;
+        CharSequence message = "";
+        if (marqueeItem instanceof CharSequence) {
+            message = (CharSequence) marqueeItem;
+        } else if (marqueeItem instanceof IMarqueeItem) {
+            message = ((IMarqueeItem) marqueeItem).marqueeMessage();
+        }
+        textView.setText(message);
+        textView.setTag(position);
+        return textView;
     }
 
     public int getPosition() {
