@@ -140,7 +140,7 @@ class MarqueeView (context: Context,attributeSet: AttributeSet):ViewFlipper(cont
             textView.gravity = Gravity.CENTER_VERTICAL
             textView.maxLines = 2
             textView.ellipsize = TextUtils.TruncateAt.END
-            textView.textSize = textSize.toFloat()
+            textView.textSize = textSize.toFloat()-1
             textView.includeFontPadding = true
             textView.setTextColor(textColor)
 //            if (message is CharSequence) {
