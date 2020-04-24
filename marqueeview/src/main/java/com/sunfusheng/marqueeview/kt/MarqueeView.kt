@@ -14,7 +14,6 @@ import android.view.Gravity
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.ViewFlipper
-import com.sunfusheng.marqueeview.IMarqueeItem
 import com.sunfusheng.marqueeview.R
 import com.sunfusheng.marqueeview.Utils
 import kotlinx.coroutines.Dispatchers
@@ -142,6 +141,7 @@ class MarqueeView (context: Context,attributeSet: AttributeSet):ViewFlipper(cont
             textView.maxLines = 2
             textView.ellipsize = TextUtils.TruncateAt.END
             textView.textSize = textSize.toFloat()
+            textView.includeFontPadding = true
             textView.setTextColor(textColor)
 //            if (message is CharSequence) {
 //                textView.setTextFuture(
