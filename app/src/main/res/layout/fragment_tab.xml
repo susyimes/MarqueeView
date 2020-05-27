@@ -11,7 +11,7 @@
         android:orientation="vertical"
 
         >
-        <com.sunfusheng.marqueeview.kt.MarqueeView
+        <com.sunfusheng.marqueeview.MarqueeView
             android:id="@+id/marqueeView"
             android:layout_width="match_parent"
             android:layout_height="50dp"

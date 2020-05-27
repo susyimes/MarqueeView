@@ -8,6 +8,9 @@ import android.os.Build;
 import android.support.annotation.AnimRes;
 import android.support.annotation.FontRes;
 import android.support.v4.content.res.ResourcesCompat;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -271,35 +274,52 @@ public class MarqueeView<T> extends ViewFlipper {
     private void createTextView() {
 //        (getDisplayedChild() + 1) % 3
         for (T message : messages){
-          TextView  textView = new TextView(getContext());
-            textView.setGravity(gravity | Gravity.CENTER_VERTICAL);
-            textView.setTextColor(textColor);
-            textView.setTextSize(textSize);
-            textView.setIncludeFontPadding(true);
-            textView.setSingleLine(singleLine);
-            if (singleLine) {
-                textView.setMaxLines(1);
-                textView.setEllipsize(TextUtils.TruncateAt.END);
-            }
-            if (typeface != null) {
-                textView.setTypeface(typeface);
-            }
-            textView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onItemClickListener != null) {
-                        onItemClickListener.onItemClick(getPosition(), (TextView) v);
-                    }
-                }
-            });
+//          TextView  textView = new TextView(getContext());
+//            textView.setGravity(gravity | Gravity.CENTER_VERTICAL);
+//            textView.setTextColor(textColor);
+//            textView.setTextSize(textSize);
+//            textView.setIncludeFontPadding(true);
+//            textView.setSingleLine(singleLine);
+//            if (singleLine) {
+//                textView.setMaxLines(1);
+//                textView.setEllipsize(TextUtils.TruncateAt.END);
+//            }
+//            if (typeface != null) {
+//                textView.setTypeface(typeface);
+//            }
+//            textView.setOnClickListener(new OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (onItemClickListener != null) {
+//                        onItemClickListener.onItemClick(getPosition(), (TextView) v);
+//                    }
+//                }
+//            });
+//
+//            if (message instanceof CharSequence) {
+//                textView.setText((CharSequence) message);
+//            } else if (message instanceof IMarqueeItem) {
+//                textView.setText(((IMarqueeItem) message).marqueeMessage());
+//            }
+//            textView.setTag(position++);
+//            addView(textView);
+            String text = message+"";
 
-            if (message instanceof CharSequence) {
-                textView.setText((CharSequence) message);
-            } else if (message instanceof IMarqueeItem) {
-                textView.setText(((IMarqueeItem) message).marqueeMessage());
-            }
-            textView.setTag(position++);
-            addView(textView);
+            TextPaint myTextPaint = new TextPaint();
+            myTextPaint.setAntiAlias(true);
+            myTextPaint.setTextSize(16 * getResources().getDisplayMetrics().density);
+            myTextPaint.setColor(0xFF000000);
+
+            int width = 800;
+            Layout.Alignment alignment = Layout.Alignment.ALIGN_NORMAL;
+            float spacingMultiplier = 1;
+            float spacingAddition = 0;
+            boolean includePadding = false;
+
+            StaticLayout myStaticLayout = new StaticLayout(text, myTextPaint, width, alignment, spacingMultiplier, spacingAddition, includePadding);
+            StaticLayoutView staticLayoutView=new StaticLayoutView(getContext());
+            staticLayoutView.setLayout(myStaticLayout);
+            addView(staticLayoutView);
         }
 //        TextView textView = (TextView) getChildAt(position);
 //        if (textView == null) {

@@ -12,6 +12,7 @@ import android.support.v7.widget.AppCompatTextView
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextUtils
+import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.URLSpan
 import android.util.Log
@@ -23,7 +24,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.AdapterViewFlipper
 import android.widget.BaseAdapter
 import android.widget.ViewFlipper
-import com.sunfusheng.marqueeview.kt.MarqueeView
+import com.sunfusheng.marqueeview.MarqueeView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -34,7 +35,7 @@ import java.util.*
  * @author by sunfusheng on 2017/8/8.
  */
 class CommonFragment : Fragment() {
-    private var marqueeView: MarqueeView? = null
+    private var marqueeView: MarqueeView<Any>?=null
     //    private MarqueeView marqueeView1;
 //    private MarqueeView marqueeView2;
 //    private MarqueeView marqueeView3;
@@ -62,7 +63,7 @@ class CommonFragment : Fragment() {
         list.add(ss1)
         val ss2 = SpannableString("2、GitHub：sunfusheng+GitHub：sunfusheng+GitHub：sunfusheng+GitHub：sunfusheng+GitHub：sunfusheng\n$ss1")
         ss2.setSpan(StyleSpan(Typeface.BOLD), 2, 13, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        //ss2.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.blue)), 9, 19, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss2.setSpan(ForegroundColorSpan(resources.getColor(R.color.blue)), 9, 19, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         list.add(ss2)
 //        val ss3 = SpannableString("3、个人博客：sunfusheng.com")
 //        ss3.setSpan(URLSpan("http://sunfusheng.com/"), 7, 21, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -73,7 +74,7 @@ class CommonFragment : Fragment() {
         list.add(ss1)
         //set Custom font
 //marqueeView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.huawenxinwei));
-        marqueeView?.startWithList(list)
+        marqueeView?.startWithList(list as List<Any>?)
         //marqueeView.setOnItemClickListener((position, textView) -> Toast.makeText(getContext(), textView.getText() + "", Toast.LENGTH_SHORT).show());
         val flipAdapter = FlipAdapter(list)
         viewFlipper.adapter = flipAdapter
