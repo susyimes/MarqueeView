@@ -11,7 +11,7 @@
         android:orientation="vertical"
 
         >
-        <com.sunfusheng.marqueeview.kt.MarqueeView
+        <com.sunfusheng.marqueeview.MarqueeView
             android:id="@+id/marqueeView"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -24,6 +24,7 @@
             app:mvInterval="3000"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:mvLineSpace="10"
             />
 
     </android.support.constraint.ConstraintLayout>

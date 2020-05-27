@@ -23,7 +23,8 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.AdapterViewFlipper
 import android.widget.BaseAdapter
 import android.widget.ViewFlipper
-import com.sunfusheng.marqueeview.kt.MarqueeView
+import com.sunfusheng.marqueeview.MarqueeView
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -34,7 +35,7 @@ import java.util.*
  * @author by sunfusheng on 2017/8/8.
  */
 class CommonFragment : Fragment() {
-    private var marqueeView: MarqueeView? = null
+    private var marqueeView: MarqueeView<Any>? = null
     //    private MarqueeView marqueeView1;
 //    private MarqueeView marqueeView2;
 //    private MarqueeView marqueeView3;
@@ -73,7 +74,7 @@ class CommonFragment : Fragment() {
         list.add(ss1)
         //set Custom font
 //marqueeView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.huawenxinwei));
-        marqueeView?.startWithList(list)
+        marqueeView?.startWithList(list as List<Any>?)
         //marqueeView.setOnItemClickListener((position, textView) -> Toast.makeText(getContext(), textView.getText() + "", Toast.LENGTH_SHORT).show());
         val flipAdapter = FlipAdapter(list)
         viewFlipper.adapter = flipAdapter
