@@ -55,9 +55,15 @@ public class MarqueeView<T> extends ViewFlipper {
     private int position;
     private List<T> messages = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
+    private OnViewFlipListener mListener;
     private int lineSpace;
-
-
+    private int index=0;
+    public interface OnViewFlipListener {
+        void onFlipIn(int position);
+    }
+    public void setFliListener(OnViewFlipListener listener) {
+        this.mListener = listener;
+    }
     public MarqueeView(Context context) {
         this(context, null);
     }
@@ -312,10 +318,34 @@ public class MarqueeView<T> extends ViewFlipper {
 
         Animation outAnim = AnimationUtils.loadAnimation(getContext(), outAnimResID);
         if (hasSetAnimDuration) outAnim.setDuration(animDuration);
+        inAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (index==messages.size()){
+                    index=0;
+                }
+                index++;
+                int l = index% messages.size();
+                mListener.onFlipIn((int) l);
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         setOutAnimation(outAnim);
     }
 
     public void setTypeface(Typeface typeface) {
         this.typeface = typeface;
     }
+
+
 }

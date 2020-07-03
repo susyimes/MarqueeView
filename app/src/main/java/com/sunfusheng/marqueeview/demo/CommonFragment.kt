@@ -75,6 +75,9 @@ class CommonFragment : Fragment() {
         //set Custom font
 //marqueeView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.huawenxinwei));
         marqueeView?.startWithList(list as List<Any>?)
+        marqueeView?.setFliListener {
+            Log.e("fliiiiii",it.toString()+"////")
+        }
         //marqueeView.setOnItemClickListener((position, textView) -> Toast.makeText(getContext(), textView.getText() + "", Toast.LENGTH_SHORT).show());
         val flipAdapter = FlipAdapter(list)
         viewFlipper.adapter = flipAdapter
@@ -89,6 +92,7 @@ class CommonFragment : Fragment() {
         val anim_out = ObjectAnimator.ofPropertyValuesHolder(viewFlipper, p3, p4).setDuration(1000)
         anim_out.interpolator = AccelerateDecelerateInterpolator()
         viewFlipper.outAnimation = anim_out
+
 //                viewFlipper.setFlipInterval(3000);
 //        viewFlipper.setAutoStart(true);
 //ObjectAnimator animator = ObjectAnimator.ofFloat(, "translationY", 0, 200, -100,0);
